@@ -1,0 +1,40 @@
+.topBar {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 25px;
+  border-bottom: 4px solid #383e41;
+}
+
+.topBarBtn {
+  width: 70%;
+}
+
+.row div {
+  height: 40px;
+  text-align: center;
+  transition: all 100ms ease-in;
+}
+
+.row div:hover {
+  background-color: #f2f2f2;
+  border-top: 3px solid #41b1e3;
+}
+
+.row div a:hover {
+  color: #7b8688;
+}
+
+.topBarBtn div a {
+  margin-top: 3px;
+  font-size: 20px;
+  color: #383e41;
+  font-weight: 600;
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.active {
+  background-color: #f2f2f2;
+  border-top: 3px solid #e30066;
+}

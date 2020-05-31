@@ -1,0 +1,10 @@
+ul { list-style: none;  padding: 0; margin-top: 30px}
+li { display: flex; justify-content: center; margin-bottom: 20px}
+a { color: #383e41}
+.userBlock {  border-left: 5px solid #41b1e3; width: 90%; background-color: #eafcff; transition: 0.2s; height: 80px; border-radius: 15px}
+.userBlock a { width: 100%}
+.userBlock:hover { background-color: #ccdbde; border-left: 5px solid #383e41 }
+.userInfo { display: flex;}
+.avatar { margin: 5px 0 0 10px;}
+.avatar img { width: 70px; height: auto; border-radius: 100%;}
+.name { margin-left: 5px; font-size: 23px; font-weight: bolder; margin-top: 20px}

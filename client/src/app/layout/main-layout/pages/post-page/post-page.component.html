@@ -1,0 +1,236 @@
+<div *ngIf="!sharedServices.loading; else loadingBlock">
+  <div class="container">
+    <div class="post">
+      <div class="postHeader">
+        <div class="infoUserPost">
+          <div class="avatar">
+            <a
+              routerLink="/user/{{localStorageServices.userData.localId}}"
+              *ngIf="idFromParams === localStorageServices.userData.localId else avatarOtherUser"
+            >
+              <img [src]="localStorageServices.userData.profile.avatar">
+            </a>
+            <ng-template #avatarOtherUser>
+              <a routerLink="/user/{{postRender.owner}}">
+                <img [src]="postRender.ownerUser.avatar">
+              </a>
+            </ng-template>
+          </div>
+          <div class="name">
+            <a
+              routerLink="/user/{{localStorageServices.userData.localId}}"
+              *ngIf="idFromParams === localStorageServices.userData.localId else userNameOtherUser"
+            >
+              {{localStorageServices.userData.profile.userName}}
+            </a>
+              <ng-template #userNameOtherUser>
+                <a routerLink="/user/{{postRender.owner}}">
+                  {{postRender.ownerUser.userName}}
+                </a>
+              </ng-template>
+          </div>
+        </div>
+        <div class="post-menu" *ngIf="idFromParams === localStorageServices.userData.localId">
+          <span>&equiv;</span>
+          <ul class="post-menu-ul">
+            <li (click)="sharedServices.openModal(template)">Delete Post</li>
+            <li (click)="sharedServices.openModal(template1)">Edit Post</li>
+          </ul>
+        </div>
+      </div>
+      <div class="postContent">
+        <div class="img">
+          <img [src]="postRender.img" (dblclick)="addLike()">
+        </div>
+        <div class="message" *ngIf="postRender.message">
+          <p>{{postRender.message}}</p>
+        </div>
+        <div class="postInfo">
+          <div class="postAnalitics">
+            <div class="trueLike" (click)="addLike()" *ngIf="sharedServices.checkActiveLike(postRender.likes) else nonLike">
+              <p><img [src]="localStorageServices.sharedData.likeActiveIcon">:{{postRender.likes.length}}</p>
+            </div>
+            <ng-template #nonLike>
+              <div class="falseLike" (click)="addLike()">
+                <p><img [src]="localStorageServices.sharedData.likeIcon">:{{postRender.likes.length}}</p>
+              </div>
+            </ng-template>
+            <div class="commentsInfo">
+              <p><img [src]="localStorageServices.sharedData.commentIcon">:{{postRender.comments.length}}</p>
+            </div>
+          </div>
+          <div class="dataBar">
+            <p>{{postRender.data | date:'short'}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="postFuter">
+        <div class="comments">
+          <span class="commentsHeader">Comments:</span>
+          <div class="yourComment" [formGroup]="commentForm" (ngSubmit)="submitAddComment()">
+            <div
+              [ngClass]="{invalid: commentForm.get('comment').touched && commentForm.get('comment').invalid}"
+              class="createComment"
+            >
+              <input
+                type="text"
+                formControlName="comment"
+                class="inputComment"
+                placeholder="Your New Comment"
+              >
+            </div>
+            <div
+              class="validation"
+              *ngIf="commentForm.get('comment').touched && commentForm.get('comment').invalid"
+            >
+              <ul class="validation-small">
+                <li><small *ngIf="commentForm.get('comment').errors.required">Это поле обязательное для комментария!</small></li>
+                <li><small *ngIf="commentForm.get('comment').errors.minlength">
+                  Country должен содержать более {{commentForm.get('comment').errors.minlength.requiredLength}} символов!
+                </small></li>
+                <li><small *ngIf="commentForm.get('comment').errors.maxlength">
+                  Country должен содержать менее {{commentForm.get('comment').errors.maxlength.requiredLength}} символов!
+                </small></li>
+              </ul>
+            </div>
+            <div class="enterChoose"  *ngIf="commentForm.valid">
+              <button
+                class="confirmBtn"
+                [disabled]="commentForm.invalid"
+                (click)="submitAddComment()"
+              >
+                Push Comment
+              </button>
+            </div>
+          </div>
+          <div class="comment" *ngFor="let comment of postRender.comments.reverse()">
+            <div class="infoComment">
+              <div class="nameAvatar">
+                <div class="avatarComment">
+                  <a routerLink="/user/{{postRender.owner}}">
+                    <img [src]="comment.ownerAvatar">
+                  </a>
+                </div>
+                <div class="nameComment">
+                  <a routerLink="/user/{{postRender.owner}}">
+                    <p>{{comment.ownerName}}</p>
+                  </a>
+                </div>
+              </div>
+              <div class="setting-comment">
+                <div class="dataComment">
+                  <p>{{comment.data | date:'short'}}</p>
+                </div>
+                <div class="comment-menu" *ngIf="comment.ownerId === localStorageServices.userData.localId" (click)="deleteComment(comment)">
+                  &times;
+                </div>
+              </div>
+
+            </div>
+            <div class="messageComment">
+              <p>{{comment.message}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+<!--======================================= Модалка для Cropper ==============================-->
+<ng-template #template1>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left" *ngIf="!imageChangedEvent">Оставить предыдущее фото</h4>
+    <h4 class="modal-title pull-left" *ngIf="imageChangedEvent">Обрежте ваше фото</h4>
+    <button type="button" class="close pull-right" aria-label="close" (click)="sharedServices.modalRef.hide(); resetPost()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body justify-content-center">
+    <div class="chooseNewFotoPost" *ngIf="!imageChangedEvent">
+      <input type="file" name="file" id="file" class="inputfile" accept="image/*" (change)="fileChangeEvent($event)"/>
+      <label for="file"><p>New foto</p></label>
+    </div>
+    <div class="image" *ngIf="imageChangedEvent">
+      <image-cropper
+        [imageChangedEvent]="imageChangedEvent"
+        [maintainAspectRatio]="true"
+        [aspectRatio]="4/3"
+        [cropperMinWidth]="400"
+        [cropperMinHeight]="400"
+        [imageQuality]="100"
+        format="jpeg"
+        (imageCropped)="choose($event)"
+        style="padding: 0;"
+      ></image-cropper>
+    </div>
+    <div class="enterChoose">
+      <button class="confirmBtn" (click)="sharedServices.modalRef.hide(); sharedServices.openModal(template2)" *ngIf="!imageChangedEvent">Skip</button>
+      <button class="confirmBtn" (click)="sharedServices.modalRef.hide(); sharedServices.openModal(template2)" *ngIf="imageChangedEvent">confirm</button>
+    </div>
+  </div>
+</ng-template>
+<!--=======================================================-->
+<ng-template #template2>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Message</h4>
+    <button type="button" class="close pull-right" aria-label="close" (click)="sharedServices.modalRef.hide(); resetPost()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="skipText">
+      <button (click)="messagePost = postRender.message">
+        Оставить тот же текст
+      </button>
+    </div>
+    <div class="content">
+      <textarea name="messagePost" id="messagePost" rows="8" [(ngModel)]="messagePost"></textarea>
+    </div>
+    <div class="enterChoose">
+      <button class="confirmBtn" (click)="sharedServices.modalRef.hide(); editPost();">confirm</button>
+    </div>
+  </div>
+</ng-template>
+<!--=================================================-->
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Delete post?</h4>
+    <button type="button" class="close pull-right" aria-label="close" (click)="sharedServices.modalRef.hide();">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="btn-bar">
+      <div id="no" (click)="sharedServices.modalRef.hide()">
+          Do not delete
+      </div>
+      <div id="yes" (click)="deletePost(); sharedServices.modalRef.hide()">
+          Delete
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!--=================================================-->
+<ng-template #loadingBlock>
+  <div class="loadingBlock" style="margin-top: 20%">
+    <div class="loadingLabel">
+      <div class="cssload-thecube">
+        <div class="cssload-cube cssload-c1"></div>
+        <div class="cssload-cube cssload-c2"></div>
+        <div class="cssload-cube cssload-c4"></div>
+        <div class="cssload-cube cssload-c3"></div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+

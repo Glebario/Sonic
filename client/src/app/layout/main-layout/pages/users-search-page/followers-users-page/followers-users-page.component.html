@@ -1,0 +1,34 @@
+<div class="container">
+
+  <div
+    class="search-results"
+    infiniteScroll
+    [infiniteScrollDistance]="2"
+    [infiniteScrollThrottle]="50"
+    (scrolled)="onScroll()"
+  >
+
+    <div class="message" *ngIf="!users.length else blocksUser">
+      <p>You do not have followers!</p>
+    </div>
+      <ng-template #blocksUser>
+        <ul class="row row-cols-2 no-gutters">
+          <li class="col" *ngFor="let user of users">
+            <div class="userBlock">
+              <a routerLink="/user/{{user.localId}}">
+            <span class="userInfo">
+              <div class="avatar">
+                <img [src]="user.avatar">
+            </div>
+            <div class="name">
+              <p>{{user.userName}}</p>
+            </div>
+            </span>
+              </a>
+            </div>
+          </li>
+        </ul>
+      </ng-template>
+  </div>
+</div>
+

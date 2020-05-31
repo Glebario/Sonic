@@ -1,0 +1,74 @@
+<div *ngIf="!sharedServices.loading; else loadingBlock">
+  <div class="sign-in-page">
+    <div class="btn-register">
+      <small>У вас нет аккаунта?<br>Тогда вам сюда>>></small><a routerLink="/sign-up">Registration</a>
+    </div>
+    <div class="sign-in-form">
+      <div class="contact-form" [formGroup]="form" (ngSubmit)="submitSignIn()">
+
+        <div *ngIf="errorRender" class="error">
+          {{errorRender.error.message}}
+        </div>
+
+        <!--======================EMAIL===========================-->
+        <div
+          class="form-control-block"
+          [ngClass]="{invalid: form.get('email').touched && form.get('email').invalid}"
+        >
+          <label for="email-id" class="required">Email:</label>
+          <input name="email-id" type="text" id="email-id" maxlength="40" formControlName="email">
+          <div
+            class="validation"
+            *ngIf="form.get('email').touched && form.get('email').invalid"
+          >
+            <small *ngIf="form.get('email').errors.required">
+              Это поле обязательное!
+            </small>
+            <small *ngIf="form.get('email').errors.email">
+              Введите email корректно!
+            </small>
+          </div>
+        </div>
+        <!--=========================PASSWORD========================-->
+        <div
+          class="form-control-block"
+          [ngClass]="{invalid: form.get('password').touched && form.get('password').invalid}"
+        >
+          <label for="password-id" class="required">Password:</label>
+          <input name="password-id" type="password" id="password-id" maxlength="40" formControlName="password">
+          <div
+            class="validation"
+            *ngIf="form.get('password').touched && form.get('password').invalid"
+          >
+            <small *ngIf="form.get('password').errors.required">
+              Это поле обязательное!
+            </small>
+            <small *ngIf="form.get('password').errors.minlength">
+              Password должен содержать не менее {{form.get('password').errors.minlength.requiredLength}} символов!
+            </small>
+          </div>
+        </div>
+        <div *ngIf="form.valid" class="submit-btn">
+          <button
+            type="submit"
+            [disabled]="form.invalid"
+            (click)="submitSignIn()"
+          >Sign-In</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--=================================================-->
+<ng-template #loadingBlock>
+  <div class="loadingBlock" style="margin-top: 20%">
+    <div class="loadingLabel">
+      <div class="cssload-thecube">
+        <div class="cssload-cube cssload-c1"></div>
+        <div class="cssload-cube cssload-c2"></div>
+        <div class="cssload-cube cssload-c4"></div>
+        <div class="cssload-cube cssload-c3"></div>
+      </div>
+    </div>
+  </div>
+</ng-template>

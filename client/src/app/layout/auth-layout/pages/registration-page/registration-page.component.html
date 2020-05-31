@@ -1,0 +1,231 @@
+<div *ngIf="!sharedServices.loading; else loadingBlock">
+  <div class="sign-up-page">
+    <div class="btn-register">
+      <small>У вас уже есть аккаунт?<br>Тогда вам сюда>>></small><a routerLink="/sign-in">Sign-In</a>
+    </div>
+    <!--====================================РЕГИСТРАЦИЯ============-->
+    <div class="sign-up-form">
+      <div class="contact-form" [formGroup]="registerForm" (ngSubmit)="submitAddUser()">
+
+        <div *ngIf="errorRender" class="error">
+          {{errorRender.error.message}}
+        </div>
+
+        <!--============================ИМЯ====================-->
+        <div
+          class="form-control-block"
+          [ngClass]="{invalid: registerForm.get('name').touched && registerForm.get('name').invalid}"
+        >
+          <label for="name-id" class="required">Name:</label>
+          <input
+            name="name-id"
+            type="text"
+            id="name-id"
+            formControlName="name"
+            placeholder="Name"
+          >
+          <div
+            class="validation"
+            *ngIf="registerForm.get('name').touched && registerForm.get('name').invalid"
+          >
+            <ul class="validation-small">
+              <li><small *ngIf="registerForm.get('name').errors.required">Это поле обязательное!</small></li>
+              <li><small *ngIf="registerForm.get('name').errors.minlength">
+                Name должен содержать более {{registerForm.get('name').errors.minlength.requiredLength}} символов!
+              </small></li>
+              <li><small *ngIf="registerForm.get('name').errors.maxlength">
+                Name должен содержать менее {{registerForm.get('name').errors.maxlength.requiredLength}} символов!
+              </small></li>
+            </ul>
+          </div>
+        </div>
+        <!--=============================СТРАНА===================-->
+        <div
+          class="form-control-block"
+          [ngClass]="{invalid: registerForm.get('country').touched && registerForm.get('country').invalid}"
+        >
+          <label for="country-id" class="required">Country:</label>
+          <input
+            name="country-id"
+            type="text"
+            id="country-id"
+            formControlName="country"
+            placeholder="Country"
+          >
+          <div
+            class="validation"
+            *ngIf="registerForm.get('country').touched && registerForm.get('country').invalid"
+          >
+            <ul class="validation-small">
+              <li><small *ngIf="registerForm.get('country').errors.required">Это поле обязательное!</small></li>
+              <li><small *ngIf="registerForm.get('country').errors.minlength">
+                Country должен содержать более {{registerForm.get('country').errors.minlength.requiredLength}} символов!
+              </small></li>
+              <li><small *ngIf="registerForm.get('country').errors.maxlength">
+                Country должен содержать менее {{registerForm.get('country').errors.maxlength.requiredLength}} символов!
+              </small></li>
+            </ul>
+          </div>
+        </div>
+        <!--=============================ПОЛ===================-->
+        <div
+          class="form-control-block"
+          [ngClass]="{invalid: registerForm.get('gender').touched && registerForm.get('gender').invalid}"
+        >
+          <label class="required">Gender:</label>
+          <div class="row ">
+            <div class="col-6">
+              <div class="radio-btn">
+                <label for="gender-id-male" class="radio-btn-label">Male:</label>
+                <input
+                  class="radio-btn-input"
+                  type="radio"
+                  id="gender-id-male"
+                  value="male"
+                  formControlName="gender"
+                >
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="radio-btn">
+                <label for="gender-id-female" class="radio-btn-label">Female:</label>
+                <input
+                  class="radio-btn-input"
+                  type="radio"
+                  id="gender-id-female"
+                  value="female"
+                  formControlName="gender"
+                >
+              </div>
+            </div>
+          </div>
+          <div
+            class="validation"
+            *ngIf="registerForm.get('gender').touched && registerForm.get('gender').invalid"
+          >
+            <ul class="validation-small">
+              <li><small *ngIf="registerForm.get('email').errors.required">Это поле обязательное!</small></li>
+            </ul>
+          </div>
+        </div>
+        <!--=========================EMAIL=======================-->
+        <div
+          class="form-control-block"
+          [ngClass]="{invalid: registerForm.get('email').touched && registerForm.get('email').invalid}"
+        >
+          <label for="email-id" class="required">Email:</label>
+          <input
+            name="email-id"
+            type="text"
+            id="email-id"
+            formControlName="email"
+            placeholder="Email"
+          >
+          <div
+            class="validation"
+            *ngIf="registerForm.get('email').touched && registerForm.get('email').invalid"
+          >
+            <ul class="validation-small">
+              <li><small *ngIf="registerForm.get('email').errors.required">Это поле обязательное!</small></li>
+              <li><small *ngIf="registerForm.get('email').errors.email">Введите email коректно!</small></li>
+            </ul>
+          </div>
+        </div>
+        <!--=========================ПАРОЛЬ=======================-->
+        <div
+          class="form-control-block"
+          [ngClass]="{invalid: registerForm.get('password').getError('invalidPassword') && registerForm.get('password').touched}"
+        >
+          <label for="password-id" class="required">Password:</label>
+          <input
+            name="password-id"
+            type="password"
+            id="password-id"
+            formControlName="password"
+            placeholder="Password"
+          >
+          <ul
+            class="validation"
+            *ngIf="registerForm.get('password').invalid && registerForm.get('password').touched"
+          >
+            <li>
+              <small *ngIf="registerForm.get('password').errors.required">
+                Это поле обязательное!
+              </small>
+            </li>
+            <li *ngIf="registerForm.get('password').getError('invalidPasswordHasNumber')">
+              <small>
+                {{registerForm.get('password').getError('invalidPasswordHasNumber')}}
+              </small>
+            </li>
+            <li *ngIf="registerForm.get('password').getError('invalidPasswordHasLowercaseLetter')">
+              <small>
+                {{registerForm.get('password').getError('invalidPasswordHasLowercaseLetter')}}
+              </small>
+            </li>
+            <li *ngIf="registerForm.get('password').getError('invalidPasswordHasCapitalLetter')">
+              <small>
+                {{registerForm.get('password').getError('invalidPasswordHasCapitalLetter')}}
+              </small>
+            </li>
+            <li *ngIf="registerForm.get('password').getError('invalidPasswordIsLengthValid')">
+              <small>
+                {{registerForm.get('password').getError('invalidPasswordIsLengthValid')}}
+              </small>
+            </li>
+            <li *ngIf="registerForm.get('password').getError('invalidPassword')">
+              <small>
+                {{registerForm.get('password').getError('invalidPassword')}}
+              </small>
+            </li>
+          </ul>
+        </div>
+        <!--=====================ПОТДВЕРЖДЕНИЕ ПАРОЛЯ===========================-->
+        <div
+          class="form-control-block"
+          [ngClass]="{invalid: registerForm.get('confirmPassword').touched && registerForm.errors?.mismatch}"
+        >
+          <label for="confirm-password-id" class="required">Confirm-password:</label>
+          <input
+            name="confirm-password-id"
+            type="password"
+            id="confirm-password-id"
+            formControlName="confirmPassword"
+            placeholder="Confirm-password"
+          >
+          <div
+            class="validation"
+            *ngIf="registerForm.get('confirmPassword').touched"
+          >
+            <ul class="validation-small">
+              <li>
+                <small *ngIf="registerForm.errors?.mismatch">
+                  {{registerForm.errors?.mismatch}}
+                </small></li>
+            </ul>
+          </div>
+        </div>
+        <!--====================КНОПКА ОТПРАВКИ============================-->
+        <div *ngIf="registerForm.valid" class="submit-btn">
+          <button
+            type="submit"
+            [disabled]="registerForm.invalid"
+            (click)="submitAddUser()"
+          >Sign-Up</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #loadingBlock>
+  <div class="loadingBlock" style="margin-top: 20%">
+    <div class="loadingLabel">
+      <div class="cssload-thecube">
+        <div class="cssload-cube cssload-c1"></div>
+        <div class="cssload-cube cssload-c2"></div>
+        <div class="cssload-cube cssload-c4"></div>
+        <div class="cssload-cube cssload-c3"></div>
+      </div>
+    </div>
+  </div>
+</ng-template>

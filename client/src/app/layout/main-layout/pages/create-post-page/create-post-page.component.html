@@ -1,0 +1,80 @@
+<div class="container" *ngIf="!sharedServices.loading; else loadingBlock">
+  <ng-template #chooseFotoBtn>
+    <div class="chooseFotoPost">
+      <input type="file" name="file" id="file" class="inputfile" accept="image/*" (change)="fileChangeEvent($event); sharedServices.openModal(template)"/>
+      <label for="file"><p>NEW</p></label>
+    </div>
+  </ng-template>
+  <div class="chooseMessagePost" *ngIf="croppedImage != '' && postStatus else chooseFotoBtn">
+    <div class="post">
+      <div class="imgPost">
+        <img [src]="croppedImage">
+      </div>
+      <hr>
+      <div class="messagePost">
+        <p>{{messagePost}}</p>
+      </div>
+      <hr>
+      <div class="enterChoose">
+        <button class="confirmBtn" (click)="postCreate(); resetPost()">confirm</button>
+      </div>
+    </div>
+  </div>
+  <!--======================================= Модалка для Cropper ==============================-->
+  <ng-template #template>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Обрежте ваше фото</h4>
+      <button type="button" class="close pull-right" aria-label="close" (click)="sharedServices.modalRef.hide(); resetPost()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="image">
+        <image-cropper
+          [imageChangedEvent]="imageChangedEvent"
+          [maintainAspectRatio]="true"
+          [aspectRatio]="4/3"
+          [cropperMinWidth]="400"
+          [cropperMinHeight]="400"
+          [imageQuality]="100"
+          format="jpeg"
+          (imageCropped)="choose($event)"
+          style="padding: 0;"
+        ></image-cropper>
+      </div>
+      <div class="enterChoose">
+        <button class="confirmBtn" (click)="imageCropped(); sharedServices.modalRef.hide(); sharedServices.openModal(template2)">confirm</button>
+      </div>
+    </div>
+  </ng-template>
+  <!--=======================================================-->
+  <ng-template #template2>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Message</h4>
+      <button type="button" class="close pull-right" aria-label="close" (click)="sharedServices.modalRef.hide(); resetPost()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="content">
+        <textarea name="messagePost" id="messagePost" rows="8" [(ngModel)]="messagePost"></textarea>
+      </div>
+      <div class="enterChoose">
+        <button class="confirmBtn" (click)="sharedServices.modalRef.hide(); postStatusChange()">confirm</button>
+      </div>
+    </div>
+  </ng-template>
+</div>
+<!--=================================================-->
+<ng-template #loadingBlock>
+  <div class="loadingBlock" style="margin-top: 20%">
+    <div class="loadingLabel">
+      <div class="cssload-thecube">
+        <div class="cssload-cube cssload-c1"></div>
+        <div class="cssload-cube cssload-c2"></div>
+        <div class="cssload-cube cssload-c4"></div>
+        <div class="cssload-cube cssload-c3"></div>
+      </div>
+    </div>
+  </div>
+</ng-template>

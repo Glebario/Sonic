@@ -1,0 +1,21 @@
+<div class="container">
+  <div class="topBar">
+    <div class="topBarBtn">
+      <div class="row no-gutters">
+        <div class="col-4" routerLinkActive="active">
+          <a routerLink="/users/allUsers">All Users</a>
+        </div>
+        <div class="col-4" routerLinkActive="active">
+          <a routerLink="/users/my-followers">My-Followers</a>
+        </div>
+        <div class="col-4" routerLinkActive="active">
+          <a routerLink="/users/my-subscription">My-Subscription</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="users">
+  <router-outlet></router-outlet>
+</div>
+

@@ -1,0 +1,33 @@
+<div class="container">
+  <div class="message" *ngIf="!localStorageServices.userData.profile.favoritePosts.length else posts">
+    You do not have posts you like yet!
+  </div>
+  <ng-template #posts>
+    <div class="container no-gutters">
+      <div class="posts">
+        <ul class="row row-cols-3 no-gutters">
+          <li class="col post" *ngFor="let post of likePosts">
+            <a routerLink="/user/{{post.userId}}/post/{{post.postId}}">
+              <div class="imgPostBlock">
+                <div class="likes">
+                  <div class="likesActive">
+                    <div class="trueLike" *ngIf="sharedServices.checkActiveLike(post.likes) else nonLike">
+                      <p><img [src]="localStorageServices.sharedData.likeActiveIcon">:{{post.likes.length}}</p>
+                    </div>
+                    <ng-template #nonLike>
+                      <div class="falseLike">
+                        <p><img [src]="localStorageServices.sharedData.likeIcon">:{{post.likes.length}}</p>
+                      </div>
+                    </ng-template>
+                    <p><img [src]="localStorageServices.sharedData.commentIcon">:{{post.comments}}</p></div>
+                </div>
+                <img class="imgPost" [src]="post.img">
+              </div>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </ng-template>
+</div>
+

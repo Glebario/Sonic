@@ -1,0 +1,128 @@
+<div class="message" *ngIf="!posts.length else block">
+  <p>You are not subscribed!</p>
+</div>
+<ng-template #block>
+  <div class="container">
+    <div
+      class="search-results"
+      infiniteScroll
+      [infiniteScrollDistance]="2"
+      [infiniteScrollThrottle]="50"
+      (scrolled)="onScroll()"
+    >
+    <div class="postBlock" *ngFor="let post of posts">
+      <div class="post">
+        <div class="postHeader">
+          <div class="ownerAvatar">
+            <a routerLink="/user/{{post.owner}}">
+              <img [src]="post.ownerUser.avatar"/>
+            </a>
+          </div>
+          <div class="ownerName">
+            <a routerLink="/user/{{post.owner}}">
+              <p>{{post.ownerUser.userName}}</p>
+            </a>
+          </div>
+        </div>
+        <div class="postContent">
+          <div class="postImg">
+            <img [src]="post.img"/>
+          </div>
+          <div class="postMessage" *ngIf="post.message">
+            <p>{{post.message}}</p>
+          </div>
+        </div>
+        <div class="postAnalytics">
+          <div class="reaction">
+            <div class="trueLike" (click)="addLike(post)" *ngIf="sharedServices.checkActiveLike(post.likes) else nonLike">
+              <p><img [src]="localStorageServices.sharedData.likeActiveIcon">:{{post.likes.length}}</p>
+            </div>
+            <ng-template #nonLike>
+              <div class="falseLike" (click)="addLike(post)">
+                <p><img [src]="localStorageServices.sharedData.likeIcon">:{{post.likes.length}}</p>
+              </div>
+            </ng-template>
+            <div class="commentsInfo">
+              <p><img [src]="localStorageServices.sharedData.commentIcon">:{{post.comments.length}}</p>
+            </div>
+          </div>
+          <div class="data">
+            <p>{{post.data | date:'short'}}</p>
+          </div>
+        </div>
+        <div class="postFuter">
+          <span>Comments:</span>
+          <div class="yourComment" [formGroup]="commentForm" (ngSubmit)="submitAddComment(post)">
+            <div
+              [ngClass]="{invalid: commentForm.get('comment').touched && commentForm.get('comment').invalid}"
+              class="createComment"
+            >
+              <input
+                type="text"
+                formControlName="comment"
+                class="inputComment"
+                placeholder="Your New Comment"
+              >
+            </div>
+            <div
+              class="validation"
+              *ngIf="commentForm.get('comment').touched && commentForm.get('comment').invalid"
+            >
+              <ul class="validation-small">
+                <li><small *ngIf="commentForm.get('comment').errors.required">Это поле обязательное для комментария!</small></li>
+                <li><small *ngIf="commentForm.get('comment').errors.minlength">
+                  Country должен содержать более {{commentForm.get('comment').errors.minlength.requiredLength}} символов!
+                </small></li>
+                <li><small *ngIf="commentForm.get('comment').errors.maxlength">
+                  Country должен содержать менее {{commentForm.get('comment').errors.maxlength.requiredLength}} символов!
+                </small></li>
+              </ul>
+            </div>
+            <div class="enterChoose"  *ngIf="commentForm.valid">
+              <button
+                class="confirmBtn"
+                [disabled]="commentForm.invalid"
+                (click)="submitAddComment(post)"
+              >
+                Push Comment
+              </button>
+            </div>
+          </div>
+
+        </div>
+        <div class="comments">
+          <div class="comment" *ngFor="let comment of post.comments.reverse()">
+            <div class="infoComment">
+              <div class="nameAvatar">
+                <div class="avatarComment">
+                  <a routerLink="/user/{{comment.ownerId}}">
+                    <img [src]="comment.ownerAvatar">
+                  </a>
+                </div>
+                <div class="nameComment">
+                  <a routerLink="/user/{{comment.ownerId}}">
+                    <p>{{comment.ownerName}}</p>
+                  </a>
+                </div>
+              </div>
+              <div class="setting-comment">
+                <div class="dataComment">
+                  <p>{{comment.data | date:'short'}}</p>
+                </div>
+                <div class="comment-menu" *ngIf="comment.ownerId === localStorageServices.userData.localId" (click)="deleteComment(post, comment)">
+                  &times;
+                </div>
+              </div>
+
+            </div>
+            <div class="messageComment">
+              <p>{{comment.message}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</ng-template>

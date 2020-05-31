@@ -1,0 +1,235 @@
+<div *ngIf="!sharedServices.loading; else loadingBlock">
+  <ng-template #OtherUser>
+    <div class="cantainer">
+      <div class="row no-gutters">
+        <div class="col-3">
+          <div class="avatarBlock">
+            <div class="avatar">
+              <img [src]="userRenderer.user.profile.avatar" style="margin-bottom: 30px" *ngIf="userRenderer.user.profile.avatar else sharedAvatar">
+              <ng-template #sharedAvatar><img [src]="localStorageServices.sharedData.avatarIcon"  style="margin-bottom: 30px"></ng-template>
+            </div>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="info-board">
+            <div class="name">
+              <p>{{userRenderer.user.profile.userName}}</p>
+            </div>
+            <div class="countryGender">
+              <small>{{userRenderer.user.profile.country}}, &emsp; {{userRenderer.user.profile.gender}}</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="statisticsBoard">
+
+            <div class="subscriber">
+              <span>Followers:</span>
+              <div *ngIf="userRenderer.user.profile.followers; else Null">
+                {{userRenderer.user.profile.followers.length}}
+              </div><ng-template #Null><div>0</div></ng-template>
+            </div>
+
+            <div class="subscription">
+              <span>Subscription:</span>
+              <div *ngIf="userRenderer.user.profile.subscription else Null">
+                {{userRenderer.user.profile.subscription.length}}
+              </div><ng-template #Null><div>0</div></ng-template>
+            </div>
+
+            <div class="quantityPosts">
+              <span>Posts:</span>
+              <div *ngIf="userRenderer.posts.length; else Null">
+                {{userRenderer.posts.length}}
+              </div>
+              <ng-template #Null><div>0</div></ng-template>
+            </div>
+
+          </div>
+          <div class="subscribeBtn" *ngIf="!checkSubscription() else subscribeActive">
+            <button (click)="addRemoveSubscribe(); intervalBtn()" [disabled]="blockedBtnInterval">
+              Subscribe
+            </button>
+          </div>
+          <ng-template #subscribeActive>
+            <div class="subscribeBtnActive">
+              <button (click)="addRemoveSubscribe(); intervalBtn()" [disabled]="blockedBtnInterval">
+                Unsubscribe
+              </button>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+    <div class="container no-gutters"  *ngIf="userRenderer.posts.reverse()">
+      <div class="posts">
+        <ul class="row row-cols-3 no-gutters">
+          <li class="col post" *ngFor="let post of userRenderer.posts">
+            <a [routerLink]="['post', post.postId]">
+              <div class="imgPostBlock">
+                <div class="likes">
+                  <div class="likesActive">
+                    <div class="trueLike" *ngIf="sharedServices.checkActiveLike(post.likes) else nonLike">
+                      <p><img [src]="localStorageServices.sharedData.likeActiveIcon">:{{post.likes.length}}</p>
+                    </div>
+                    <ng-template #nonLike>
+                      <div class="falseLike">
+                        <p><img [src]="localStorageServices.sharedData.likeIcon">:{{post.likes.length}}</p>
+                      </div>
+                    </ng-template>
+                    <p><img [src]="localStorageServices.sharedData.commentIcon">:{{post.comments}}</p></div>
+                </div>
+                <img class="imgPost" src="{{post.img}}">
+              </div>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </ng-template>
+
+
+
+
+
+
+
+
+  <!--===========================================страница пользователя==========================================-->
+  <div *ngIf="idFromParams === localStorageServices.userData.localId; else OtherUser">
+    <div class="cantainer">
+      <div class="row no-gutters">
+        <div class="col-3">
+          <div class="avatarBlock">
+            <div class="avatar">
+              <img [src]="userRenderer.user.profile.avatar" *ngIf="userRenderer.user.profile.avatar else sharedAvatar">
+              <ng-template #sharedAvatar><img [src]="localStorageServices.sharedData.avatarIcon"></ng-template>
+            </div>
+            <div class="chooseAvatar">
+              <input type="file" name="file" id="file" class="inputfile" accept="image/*" (change)="fileChangeEvent($event); sharedServices.openModal(template)"/>
+              <label for="file">Choose a FOTO</label>
+            </div>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="info-board">
+            <div class="name">
+              <p>{{userRenderer.user.profile.userName}}</p>
+            </div>
+            <div class="countryGender">
+              <small>{{userRenderer.user.profile.country}}, &emsp; {{userRenderer.user.profile.gender}}</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="statisticsBoard">
+            <div class="subscriber">
+              <span>Followers:</span>
+              <div *ngIf="userRenderer.user.profile.followers; else Null">
+                {{userRenderer.user.profile.followers.length}}
+              </div>
+              <ng-template #Null>
+                <div>
+                  0
+                </div>
+              </ng-template>
+            </div>
+            <div class="subscription">
+              <span>Subscription:</span>
+              <div *ngIf="userRenderer.user.profile.subscription else Null">
+                {{userRenderer.user.profile.subscription.length}}
+              </div>
+              <ng-template #Null>
+                <div>
+                  0
+                </div>
+              </ng-template>
+            </div>
+            <div class="quantityPosts">
+              <span>Posts:</span>
+              <div *ngIf="userRenderer.posts.length; else Null">
+                {{userRenderer.posts.length}}
+              </div>
+              <ng-template #Null>
+                <div>
+                  0
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+        <!--======================================= Модалка для Cropper ==============================-->
+        <ng-template #template>
+          <div class="modal-header">
+            <h4 class="modal-title pull-left">Обрежте ваше фото</h4>
+            <button type="button" class="close pull-right" aria-label="close" (click)="sharedServices.modalRef.hide()">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="image">
+              <image-cropper
+                [imageChangedEvent]="imageChangedEvent"
+                [maintainAspectRatio]="true"
+                [aspectRatio]="1 / 1"
+                [cropperMinWidth]="400"
+                [cropperMinHeight]="400"
+                [roundCropper]="true"
+                [imageQuality]="100"
+                format="jpeg"
+                (imageCropped)="choose($event)"
+                style="padding: 0;"
+              ></image-cropper>
+            </div>
+            <div class="enterChoose">
+              <button class="confirmBtn" (click)="imageCropped(); sharedServices.modalRef.hide()">confirm</button>
+            </div>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+    <div class="container no-gutters"  *ngIf="userRenderer.posts.reverse()">
+      <div class="posts">
+        <ul class="row row-cols-3 no-gutters">
+          <li class="col post" *ngFor="let post of userRenderer.posts">
+            <a [routerLink]="['post', post.postId]">
+              <div class="imgPostBlock">
+                <div class="likes">
+                  <div class="likesActive">
+                    <div class="trueLike" *ngIf="sharedServices.checkActiveLike(post.likes) else nonLike">
+                      <p><img [src]="localStorageServices.sharedData.likeActiveIcon">:{{post.likes.length}}</p>
+                    </div>
+                    <ng-template #nonLike>
+                      <div class="falseLike">
+                        <p><img [src]="localStorageServices.sharedData.likeIcon">:{{post.likes.length}}</p>
+                      </div>
+                    </ng-template>
+                    <div class="commentLength">
+                      <p><img [src]="localStorageServices.sharedData.commentIcon">:{{post.comments}}</p>
+                    </div>
+                  </div>
+                </div>
+                <img class="imgPost" src="{{post.img}}">
+              </div>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--=================================================-->
+<ng-template #loadingBlock>
+  <div class="loadingBlock" style="margin-top: 20%">
+    <div class="loadingLabel">
+      <div class="cssload-thecube">
+        <div class="cssload-cube cssload-c1"></div>
+        <div class="cssload-cube cssload-c2"></div>
+        <div class="cssload-cube cssload-c4"></div>
+        <div class="cssload-cube cssload-c3"></div>
+      </div>
+    </div>
+  </div>
+</ng-template>

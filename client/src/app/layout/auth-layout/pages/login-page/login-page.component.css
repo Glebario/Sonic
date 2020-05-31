@@ -1,0 +1,25 @@
+.sign-in-form {display: flex; justify-content: center; }
+
+.contact-form { margin-top: 60px; width: 30%;}
+.contact-form .form-control-block { margin-top: 15px}
+.form-control-block .validation { margin-left: 10%;}
+.form-control-block .validation small { color: #ff3f36; font-weight: bold}
+.form-control-block .validation small:before { content: "#"; color: black;}
+
+.form-control-block input {width: 100%; display: block; border: 1px solid #d5dbe0; padding: 10px 15px; outline: none; height: 46px;}
+.form-control-block label { font-weight: normal; }
+.form-control-block label.required:after { content: "*"; color: red; margin-left: 5px; }
+
+.submit-btn { margin-top: 30px; position: relative; left: 60%; }
+
+.submit-btn button { width: 40%; color: white; text-transform: uppercase; background-color: #495054; border: none; border-right: 4px solid; padding: 15px 30px;  transition: all 150ms ease-in; outline: none;}
+
+.submit-btn button:hover {color: #e3387c;}
+
+
+
+
+.btn-register { color: #5d595f; margin-top: 30px; margin-left: 20px; position: absolute; font-weight: bold}
+.btn-register small { color: #5d595f; font-weight: bold}
+.btn-register a {font-size: 20px; display: inline-block;  height: auto; width: auto; color: #38a9e3}
+.btn-register a:hover { border-right: 4px solid #e3387c; color: #e3387c; transition: all 150ms ease-in;}

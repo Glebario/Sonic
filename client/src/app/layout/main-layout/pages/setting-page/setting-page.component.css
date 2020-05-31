@@ -1,0 +1,32 @@
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.setting-bar {
+  list-style: none;
+  padding: 0;
+  margin: 50px;
+
+}
+
+li {
+  text-align: center;
+}
+
+.setting-bar li a{
+  color: white;
+  width: 200px;
+  height: 40px;
+  padding-top: 5px;
+  text-transform: uppercase;
+  display: block;
+  border-bottom: 4px solid;
+  border-radius: 7px;
+  background-color: #383e41;
+
+}
+
+.setting-bar li a:hover{
+  color: #e9b144;
+}

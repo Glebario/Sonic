@@ -1,0 +1,43 @@
+a { color: white; background-color: #383e41;}
+
+.main-menu { padding: 0; margin: 0; list-style: none;}
+#main-sidebar { background-color: #495054; color: white; width: 100%; max-width: inherit; padding-top: 75px; position: fixed}
+
+.logo {margin-bottom: 70px; background-color: #38a9e3; padding: 25px 40px; }
+.logo a { color: white; }
+.logo a h1 { text-transform: uppercase; font-size: 30px; margin: 0; font-weight: 800; }
+.logo span { color: #bee3f6; font-size: 13px; }
+
+
+.main-menu li { margin-bottom: 1px; }
+.main-menu li a { text-transform: uppercase; display: block; border-left: 4px solid; padding: 15px 30px;  }
+.main-menu li a:hover { background-color: #34393b;}
+
+li.home a { border-color: #38a9e3; }
+li.home a:hover { color: #38a9e3; }
+li.active-home a {background-color: #313537; color: #38a9e3;}
+
+li.users a { border-color: #e9b144; }
+li.users a:hover { color: #e9b144; }
+li.active-users a { background-color: #313537; color: #e9b144}
+
+
+li.posts a { border-color: #974dea; }
+li.posts a:hover { color: #974dea; }
+li.active-posts a {background-color: #313537; color: #974dea;}
+
+li.creation a { border-color: #38e395; }
+li.creation a:hover { color: #38e395; }
+li.active-creation a {background-color: #313537; color: #38e395;}
+
+li.my-favorite-posts a { border-color: #e3387c; }
+li.my-favorite-posts a:hover { color: #e3387c; }
+li.active-my-favorite-posts a {background-color: #313537; color: #e3387c;}
+
+li.settings a { border-color: #e37c05; }
+li.settings a:hover { color: #e37c05; }
+li.active-settings a {background-color: #313537; color:  #e37c05;}
+
+.content {
+  padding: 30px 25px 0;
+}

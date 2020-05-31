@@ -1,0 +1,35 @@
+<div class="row no-gutters">
+  <div class="col-3">
+    <div id="main-sidebar">
+      <div class="logo">
+        <a routerLink="/posts-feed"><h1>Sonic</h1></a>
+        <span>Creative Portfolio Template</span>
+      </div> <!-- /.logo -->
+      <ul class="main-menu">
+        <li class="home" routerLinkActive="active-home">
+          <a [routerLink]="['/user', localStorageServices.userData.localId]">Home</a>
+        </li>
+        <li class="users" routerLinkActive="active-users">
+          <a routerLink="/users">Users</a>
+        </li>
+        <li class="posts" routerLinkActive="active-posts" [routerLinkActiveOptions]="{exact: true}">
+          <a routerLink="/posts-feed">Posts</a>
+        </li>
+        <li class="creation" routerLinkActive="active-creation">
+          <a routerLink="/creation">Create Post</a>
+        </li>
+        <li class="my-favorite-posts" routerLinkActive="active-my-favorite-posts">
+          <a routerLink="/favoritePosts">Favorite posts</a>
+        </li>
+        <li class="settings" routerLinkActive="active-settings">
+          <a routerLink="/settings">Settings</a>
+        </li>
+      </ul>
+    </div> <!-- /#main-sidebar -->
+  </div>
+  <div class="col-9">
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
